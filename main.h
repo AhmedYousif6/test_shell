@@ -6,7 +6,9 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <signal.h>
 
+extern char **environ;
 char **tokenizer(char *str, char *deli);
 char *read_line(void);
 void exec(char **args);

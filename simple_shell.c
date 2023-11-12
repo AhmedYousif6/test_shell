@@ -13,27 +13,28 @@ int main(int argc, char **argv)
 	char *deli = " \n\t";
 	char **args;
 
+	signal(SIGINT, handle_sigint);
+	(void)argc;
 	if (isatty(STDIN_FILENO))
 	{
 		while (1)
 		{
-			signal(SIGINT, handle_sigint);
 			write(STDOUT_FILENO, "$$ ", 3);
 			cmd = read_line();
 			args = tokenizer(cmd, deli);
 			exec(args);
+			free(args);
 		}
-		free(cmd);
-		free(args);
-		return (0);
 	}
 
 	else
 	{
-		(void)argc;
-		exec(argv);
-		return (0);
+		cmd = argv[1];
+		args = tokenizer(cmd, deli);
+		exec(args);
+		free(args);
 	}
+	return (0);
 }
 
 /**

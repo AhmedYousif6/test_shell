@@ -11,19 +11,19 @@ char **tokenizer(char *str, char *deli)
 	char **toks;
 	int count = 0, i, x;
 
-	cpy_str = malloc(sizeof(char) * strlen(str) + 1);
+	cpy_str = malloc(sizeof(char) * (strlen(str) + 1));
 	if (cpy_str == NULL)
 	{
 		perror("Error allocate memory");
-		free(str);
-		exit(EXIT_FAILURE);
+		free(str), exit(EXIT_FAILURE);
 	}
 	strcpy(cpy_str, str);
 	token = strtok(str, deli);
 	while (token)
-		count++;
-	token = strtok(NULL, deli);
-	toks = malloc(sizeof(char *) * count + 1);
+	{
+	count++, token = strtok(NULL, deli);
+	}
+	toks = malloc(sizeof(char *) * (count + 1));
 	if (toks == NULL)
 	{
 		perror("Error allocate memory");
@@ -32,13 +32,15 @@ char **tokenizer(char *str, char *deli)
 	token = strtok(cpy_str, deli);
 	for (i = 0; token != NULL; i++)
 	{
-		toks[i] = malloc(sizeof(char) * strlen(token) + 1);
+		toks[i] = malloc(sizeof(char) * (strlen(token) + 1));
 		if (toks[i] == NULL)
 		{
 			perror("Error allocate memory");
-			for (x = 0; toks[x] != NULL; x++)
+			for (x = 0; x < i; x++)
+			{
 				free(toks[x]);
-			free(str), free(cpy_str), exit(EXIT_FAILURE);
+			}
+			free(toks), free(str), free(cpy_str), exit(EXIT_FAILURE);
 		}
 		strcpy(toks[i], token);
 		token = strtok(NULL, deli);

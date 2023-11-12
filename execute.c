@@ -19,15 +19,23 @@ void exec(char **args)
 	}
 	else if (pid == 0)
 	{
-		if (execve(args[0], args, NULL) == -1)
+		if (args[0])
 		{
-			perror("Error execute");
+			if (execve(args[0], args, environ) == -1)
+			{
+				perror("Error execute");
+				free(args);
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
 			free(args);
-			exit(EXIT_FAILURE);
+			exit(EXIT_SUCCESS);
 		}
 	}
 	else
 	{
-		wait(&status);
+		waitpid(pid, &status, 0);
 	}
 }
