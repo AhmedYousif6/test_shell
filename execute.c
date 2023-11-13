@@ -11,6 +11,7 @@ void exec(char **args)
 	int status = 0;
 	struct stat st;
 	pid_t pid = fork();
+	char *cmmd;
 
 	if (pid < 0)
 	{
@@ -22,9 +23,10 @@ void exec(char **args)
 	{
 		if (args[0])
 		{
-			if (stat(args[0], &st) == 0)
+			cmmd = get_path(args[0]);
+			if (stat(cmmd, &st) == 0)
 			{
-				if (execve(args[0], args, environ) == -1)
+				if (execve(cmmd, args, environ) == -1)
 				{
 					perror("Error execute");
 					free_array(args);
@@ -49,4 +51,3 @@ void exec(char **args)
 		waitpid(pid, &status, 0);
 	}
 }
-
