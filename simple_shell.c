@@ -13,28 +13,26 @@ int main(int argc, char **argv)
 	char *deli = " \n\t";
 	char **args;
 
-	signal(SIGINT, handle_sigint);
 	(void)argc;
-	if (isatty(STDIN_FILENO))
+	(void)argv;
+	while (1)
 	{
-		while (1)
-		{
-			write(STDOUT_FILENO, "$$ ", 3);
-			cmd = read_line();
-			args = tokenizer(cmd, deli);
-			exec(args);
-			free(args);
-		}
-	}
-
-	else
-	{
-		cmd = argv[1];
+		prompt();
+		signal(SIGINT, handle_sigint);
+		cmd = read_line();
 		args = tokenizer(cmd, deli);
 		exec(args);
-		free(args);
 	}
+	free_array(args);
 	return (0);
+}
+
+void prompt(void)
+{
+	if (isatty(STDIN_FILENO))
+	{
+		write(STDOUT_FILENO, "$$ ", 3);
+	}
 }
 
 /**
@@ -48,4 +46,26 @@ void handle_sigint(int sig)
 	(void)sig;
 	write(STDOUT_FILENO, "\n", 1);
 	write(STDOUT_FILENO, "$$ ", 3);
+}
+
+void free_array(char **args)
+{
+	size_t i;
+
+	if (args == NULL)
+	{
+		return;
+	}
+
+	while (args[i])
+	{
+		free(args[i]);
+		i++;
+	}
+
+	if (args[i] == NULL)
+	{
+		free(args[i]);
+	}
+	free(args);
 }

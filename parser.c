@@ -9,7 +9,7 @@ char **tokenizer(char *str, char *deli)
 {
 	char *cpy_str = NULL, *token;
 	char **toks;
-	int count = 0, i, x;
+	int count = 0, i;
 
 	cpy_str = malloc(sizeof(char) * (strlen(str) + 1));
 	if (cpy_str == NULL)
@@ -36,11 +36,8 @@ char **tokenizer(char *str, char *deli)
 		if (toks[i] == NULL)
 		{
 			perror("Error allocate memory");
-			for (x = 0; x < i; x++)
-			{
-				free(toks[x]);
-			}
-			free(toks), free(str), free(cpy_str), exit(EXIT_FAILURE);
+			free_array(toks);
+			free(str), free(cpy_str), exit(EXIT_FAILURE);
 		}
 		strcpy(toks[i], token);
 		token = strtok(NULL, deli);
