@@ -11,6 +11,7 @@ void exec(char **args)
 	int status = 0;
 	char *command = NULL, *cmd = NULL;
 	pid_t pid = fork();
+	char *cmmd;
 
 	if (pid < 0)
 	{
@@ -22,16 +23,6 @@ void exec(char **args)
 	{
 		if (args[0])
 		{
-			command = args[0];
-                        cmd = cmd_path(command);
-			if (cmd)
-			{
-				execve(cmd, args, environ);
-				perror("simple_shell");
-				free_array(args);
-				exit(EXIT_FAILURE);
-			}
-			else
 			{
 				write(STDERR_FILENO, "simple_shell", 12);
 				write(STDERR_FILENO, ": ", 2);
@@ -49,6 +40,7 @@ void exec(char **args)
 		waitpid(pid, &status, 0);
 	}
 }
+<<<<<<< HEAD
 
 void print_env(void)
 {
@@ -61,3 +53,5 @@ void print_env(void)
 		i++;
 	}
 }
+=======
+>>>>>>> 5203c61882305053192428b7fce3ef1fc957a9a0

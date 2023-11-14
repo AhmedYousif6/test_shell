@@ -13,6 +13,7 @@
 extern char **environ;
 char **tokenizer(char *str, char *deli);
 char *read_line(void);
+char *get_path(char *cmmd);
 void exec(char **args);
 void handle_sigint(int sig);
 void free_array(char **args);

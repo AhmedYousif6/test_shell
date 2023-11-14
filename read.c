@@ -15,6 +15,8 @@ char *read_line(void)
 	if (byte_read == -1)
 	{
 		free(cmd);
+		if (isatty(STDIN_FILENO))
+		write(STDOUT_FILENO, "\n", 1);
 		exit(EXIT_SUCCESS);
 	}
 	else
