@@ -12,11 +12,11 @@ char *get_path(char *cmmd)
 	const char *deli = ":";
 	char *path_tok;
 	int len;
+	struct stat st;
 
 	path = getenv("PATH");
 	path_copy = strdup(path);
 	len = strlen(cmmd);
-	struct stat st;
 
 	path_tok = strtok(path_copy, deli);
 	while (path_tok)

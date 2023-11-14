@@ -18,7 +18,6 @@ void exec(char **args);
 void handle_sigint(int sig);
 void free_array(char **args);
 void prompt(void);
-char *cmd_path(char *command);
 void print_env(void);
 
 #endif
