@@ -20,10 +20,23 @@ int main(int argc, char **argv)
 		prompt();
 		signal(SIGINT, handle_sigint);
 		cmd = read_line();
+		if (strcmp(cmd, "exit") == 0)
+                {
+                        free(cmd);
+			break;
+                }
+
+		 if (strcmp(cmd, "env") == 0)
+                        {
+                                print_env();
+				free(cmd);
+				continue;
+                        }
+
 		args = tokenizer(cmd, deli);
 		exec(args);
+		free_array(args);
 	}
-	free_array(args);
 	return (0);
 }
 
@@ -50,7 +63,7 @@ void handle_sigint(int sig)
 
 void free_array(char **args)
 {
-	size_t i;
+	size_t i = 0;
 
 	if (args == NULL)
 	{
@@ -63,7 +76,7 @@ void free_array(char **args)
 		i++;
 	}
 
-	if (args[i] == NULL)
+	if (args[i] != NULL)
 	{
 		free(args[i]);
 	}

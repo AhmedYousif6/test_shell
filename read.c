@@ -14,6 +14,7 @@ char *read_line(void)
 	byte_read = getline(&cmd, &cmd_size, stdin);
 	if (byte_read == -1)
 	{
+		free(cmd);
 		exit(EXIT_SUCCESS);
 	}
 	else

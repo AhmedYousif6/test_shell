@@ -9,12 +9,12 @@
 void exec(char **args)
 {
 	int status = 0;
-	struct stat st;
+	char *command = NULL, *cmd = NULL;
 	pid_t pid = fork();
 
 	if (pid < 0)
 	{
-		perror("Error fork");
+		perror("simple_shell");
 		free_array(args);
 		exit(EXIT_FAILURE);
 	}
@@ -22,23 +22,23 @@ void exec(char **args)
 	{
 		if (args[0])
 		{
-			if (stat(args[0], &st) == 0)
+			command = args[0];
+                        cmd = cmd_path(command);
+			if (cmd)
 			{
-				if (execve(args[0], args, environ) == -1)
-				{
-					perror("Error execute");
-					free_array(args);
-					exit(EXIT_FAILURE);
-				}
+				execve(cmd, args, environ);
+				perror("simple_shell");
+				free_array(args);
+				exit(EXIT_FAILURE);
 			}
 			else
 			{
-				write(STDOUT_FILENO, "simple_shell", 12);
-				write(STDOUT_FILENO, ": ", 2);
-				write(STDOUT_FILENO, "1", 1);
-				write(STDOUT_FILENO, ": ", 2);
-				write(STDOUT_FILENO, args[0], strlen(args[0]));
-				write(STDOUT_FILENO, ": not found\n", 12);
+				write(STDERR_FILENO, "simple_shell", 12);
+				write(STDERR_FILENO, ": ", 2);
+				write(STDERR_FILENO, "1", 1);
+				write(STDERR_FILENO, ": ", 2);
+				write(STDERR_FILENO, args[0], strlen(args[0]));
+				write(STDERR_FILENO, ": not found\n", 12);
 			}
 		}
 		free_array(args);
@@ -50,3 +50,14 @@ void exec(char **args)
 	}
 }
 
+void print_env(void)
+{
+	unsigned int i = 0;
+
+	while (environ[i])
+	{
+		write(STDOUT_FILENO, environ[i], strlen(environ[i]));
+		write(STDOUT_FILENO, "\n", 1);
+		i++;
+	}
+}
